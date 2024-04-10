@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa Viewer</title>
+    <style>
+        /* Adicione estilos CSS aqui conforme necessário */
+    </style>
+</head>
+
+<body>
+    <h1>Rifa Viewer</h1>
+    <label for="raffleName">Nome da Rifa:</label>
+    <input type="text" id="raffleName" placeholder="Insira o nome da rifa">
+    <br>
+    <label for="token">Token:</label>
+    <input type="password" id="token" placeholder="Insira o token">
+    <br>
+    <button onclick="buscarRifa()">Buscar</button>
+    <div id="resultado"></div>
+
+    <script>
+        function buscarRifa() {
+            const raffleName = document.getElementById('raffleName').value;
+            const token = document.getElementById('token').value;
+            const myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${token}`);
+
+            const requestOptions = {
+                method: "GET",
+                headers: myHeaders,
+                mode: "no-cors", // Solicitação sem CORS
+                redirect: "follow"
+            };
+
+            fetch(`https://api.alphabot.app/v1/raffles/${raffleName}`, requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    const resultadoElement = document.getElementById('resultado');
+                    resultadoElement.innerHTML = result;
+                })
+                .catch(error => {
+                    const resultadoElement = document.getElementById('resultado');
+                    resultadoElement.innerHTML = `<p>Erro ao buscar a rifa.</p>`;
+                    console.error('Erro:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
